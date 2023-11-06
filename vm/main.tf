@@ -13,6 +13,8 @@ provider "aws" {
   region     = var.aws_region
 }
 
+#Creating an instance with security group
+
 resource "aws_instance" "instance" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -25,11 +27,14 @@ resource "aws_instance" "instance" {
   }
 }
 
+# Add key pair to aws - upload public key
+
 resource "aws_key_pair" "key_pair" {
   key_name   = "aws_key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCynXS2GOAikLw8HBYlXhiL0vGysSFlg7ncQCk2aeUCZPurH6Oe2R4SLzgr4I7QRNDYWMWOJXEQtPN/7s+cF/aVY6+rEJ/mByPCJcugz2NJtZj3e2zZqaiHa577Ig/CoD4GA1GqMCaLnYdKjPvpuWExUEmsepfXLPhQjLEpo+YMPSXlv5waUTqmVrq/Z1qmg9N7nHKhDZXnz2tx5zfUEZr0OuOtZp0A0xNKXCGMBKTsqHYmebjI6n8v1RvwmiJqKPvo5tFu9DqZPkDJQdPlqOftg9bt6prXL91++80ZKf2wBC3UGJ1Rhk7+57HXbEDR2FYPeif6kAuMDXT7O2AMys/EXxwLYWMsLiiQkOm6ASDmMRlJ4ZsBAKkmLmVlYZIgg/oKSPaZCrEKCjO3hCJq8ovKiQnNC+C5dtYmA+nWDnNvJAa67v0UhBAV3yvdaSMYA97yC2wf+FQeDesgpk5eRHDKhbsffyq2twN82W5TIRrZYMf8DdcbakRdbs8lk7SZxU6mVHTYRgCGTR8QmRPSjYNPuXvPVK5RvbaGPbOfXD8NwRsjSBULTOoiP+blvI9hDJa2mEYyuzR2z23z3eKZDEtAMJGVkI1+mB6TTdmRwgFzHEftwgiAyS5A4QAAy0HJaF0M0qLS7brdKheGlmH+lbtngMcDJuteHXmS2n89/ZlOCQ=="
+  public_key = "ssh-rsa************"
 }
 
+# Adding 50 gb gp3 hard/EBS additionaly 
 resource "aws_ebs_volume" "ebs_volume" {
   availability_zone = "eu-west-1a"
   size              = 50
@@ -39,6 +44,8 @@ resource "aws_ebs_volume" "ebs_volume" {
     Name      = "data-volume"
   }
 }
+
+#Attach the added hard/EBS
 
 resource "aws_volume_attachment" "volume_attachment" {
   device_name = "/dev/sdc"
